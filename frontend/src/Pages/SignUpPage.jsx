@@ -4,11 +4,12 @@ import { MessageSquare, User, Mail, Lock, Eye, EyeOff,Loader2  } from "lucide-re
 import { Link } from 'react-router-dom';
 import AuthImagePattern from '../components/AuthImagePattern';
 import { toast } from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 
 
 const SignUpPage = () => {
-
+const navigate = useNavigate();
   const [showPassword,setShowPassword]=useState(false)
   const [formData,setFormData]=useState({
     name:"",
@@ -33,7 +34,7 @@ if (!formData.name.trim()) return toast.error("Full name is required");
     e.preventDefault()
     const sucess=validateForm()
     if(sucess===true){
-      signup(formData)
+      signup(formData,navigate)
     }
   }
 
