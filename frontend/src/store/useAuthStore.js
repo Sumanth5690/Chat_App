@@ -67,7 +67,7 @@ set({isSigningUp:true})
         try {
             const res=await axiosInstance.put("/auth/update-profile",data)
             set({authUser:res.data})
-            toast.success("profile photo updted successfully")
+            toast.success("profile photo updated successfully")
 
         } catch (error) {
             console.log(error)

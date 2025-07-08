@@ -20,7 +20,7 @@ const [selectedImg, setSelectedImg] = useState(null);
     reader.onload = async () => {
       const base64Image = reader.result;
       setSelectedImg(base64Image);
-      await updateProfile({ profilePic: base64Image });
+      await updateProfile({ profilepic: base64Image });
     };
   };
   return (
@@ -37,7 +37,7 @@ const [selectedImg, setSelectedImg] = useState(null);
           <div className="flex flex-col items-center gap-4">
             <div className="relative">
               <img
-                src={selectedImg || authUser.profilePic || "/avatar.png"}
+                src={selectedImg || authUser.profilepic || "/avatar.png"}
                 alt="Profile"
                 className="size-32 rounded-full object-cover border-4 "
               />
