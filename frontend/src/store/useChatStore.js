@@ -5,7 +5,7 @@ import { data } from "react-router-dom";
 
 
 
-export const useChatStore=create((set)=>({
+export const useChatStore=create((set,get)=>({
     messages:[],
     users:[],
     selectedUser:null,
