@@ -2,6 +2,9 @@ import { create } from "zustand";
 import {axiosInstance} from '../lib/axios.js'
 import toast from "react-hot-toast";
 import { data } from "react-router-dom";
+import {io} from "socket.io-client"
+
+const BASE_URL="http://localhost:3000"
 
 export const useAuthStore=create((set,get)=>({
     authUser:null,
@@ -63,6 +66,7 @@ set({isSigningUp:true})
         await axiosInstance.post("/auth/logout")
         set({authUser:null})
         toast.success("logged out succesfully")
+        get().disConnectSocket()
 
     } catch (error) {
         toast.error(error.response.data.message)
@@ -84,10 +88,16 @@ set({isSigningUp:true})
     },
 
     connectSocket:()=>{
+        const {authUser}=get()
+        if(!authUser || get().socket?.connected)return;
+     const socket=io(BASE_URL)
+     socket.connect()
 
-    }
+     set({socket:socket})
+    },
     disConnectSocket:()=>{
-
+     if(get().socket?.connected)
+        get().socket.disconnect()
     }
 
 }))
