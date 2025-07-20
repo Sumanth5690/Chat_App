@@ -13,7 +13,9 @@ const io=new Server(
     }
 )
 
-
+export function getReciverSocketId(userId){
+return userSocketMap[userId]
+}
 //online users
 const userSocketMap={}
 
