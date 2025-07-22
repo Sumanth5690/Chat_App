@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import SidebarSkeleton from './skeletons/sideBarSkeleton'
+import SidebarSkeleton from './skeletons/sidebarSkeleton'
 import { useChatStore } from '../store/useChatStore'
 import { Users } from "lucide-react"
 
