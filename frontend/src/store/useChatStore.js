@@ -50,15 +50,17 @@ export const useChatStore = create((set, get) => ({
   // Listen to real-time incoming messages via socket.io
   subscribeToMessages: () => {
     const { selectedUser } = get();
+    if (!selectedUser) return;
+
     const socket = useAuthStore.getState().socket;
 
-    if (!selectedUser || !socket) return;
-
-    // Avoid multiple listeners
-    socket.off("newMessage");
-
     socket.on("newMessage", (newMessage) => {
-      set({ messages: [...get().messages, newMessage] });
+      const isMessageSentFromSelectedUser = newMessage.senderId === selectedUser._id;
+      if (!isMessageSentFromSelectedUser) return;
+
+      set({
+        messages: [...get().messages, newMessage],
+      });
     });
   },
 
