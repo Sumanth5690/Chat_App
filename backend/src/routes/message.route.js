@@ -6,9 +6,10 @@ import {getUserForSideBar,getMessages, sendMessage} from '../controllers/message
 
 router.get('/users',protectRoute,getUserForSideBar)
 
-router.get("/:id",protectRoute,getMessages)
 
 router.post("/send/:id",protectRoute,sendMessage)
+
+router.get("/:id",protectRoute,getMessages)
 
 
 
