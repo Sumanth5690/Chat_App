@@ -13,50 +13,52 @@ export const getUserForSideBar=async(req,res)=>{
     }
 }
 
-export const getMeassages=async(req,res)=>{
+export const getMessages = async (req, res) => {
     try {
-        const {id:userToChatId}=req.params
-        const myid=req.user._id
+        const { id: userToChatId } = req.params
+        const myid = req.user._id
 
-        const messages=await Message.find({
-            $or:[
-                {senderId:myid,reciverId:userToChatId},
-                {senderId:userToChatId,reciverId:myid}
+        const messages = await Message.find({
+            $or: [
+                { senderId: myid, reciverId: userToChatId },
+                { senderId: userToChatId, reciverId: myid }
             ]
         })
+
         res.status(200).json(messages)
     } catch (error) {
         console.log(error)
     }
 }
 
-export const sendMeassage=async(req,res)=>{
-try {
-    const {text,image}=req.body
-    const {id:reciverId}=req.params
-    const senderId=req.user._id
+export const sendMessage = async (req, res) => {
+    try {
+        const { text, image } = req.body
+        const { id: reciverId } = req.params
+        const senderId = req.user._id
 
-    let imageUrl;
-    if(image){
-        const uploadResponse=await cloudinary.uploader.upload(image)
-        imageUrl=uploadResponse.secure_url
+        let imageUrl
+        if (image) {
+            const uploadResponse = await cloudinary.uploader.upload(image)
+            imageUrl = uploadResponse.secure_url
+        }
+
+        const newMessage = new Message({
+            senderId,
+            reciverId,
+            text,
+            image: imageUrl
+        })
+
+        await newMessage.save()
+
+        const reciverSocketId = getReciverSocketId(reciverId)
+        if (reciverSocketId) {
+            io.to(reciverSocketId).emit("newMessage", newMessage)
+        }
+
+        res.status(201).json(newMessage)
+    } catch (error) {
+        console.log(error)
     }
-    const newMessage=new Message({
-        senderId,
-        reciverId,
-        text,
-        image:imageUrl
-    })
-
-    await newMessage.save()
-
-    const reciverSocketId=getReciverSocketId(reciverId)
-    if(reciverSocketId){
-        io.to(reciverSocketId).emit("newMessage",newMessage)
-    }
-
-    res.status(201).json(newMessage)    
-} catch (error) {
-    console.log(error)
-}
 }
